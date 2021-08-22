@@ -26,15 +26,16 @@ def output(video_id, rendered_html):
 
 if __name__ == '__main__':
     os.system("git stash")
-    os.system("git checkout release")
 
     for x in video_list:
         object=Video(x)
         render_html(object)
+        os.system("git checkout release")
+        os.system("rm -Rf " + object.id)
         os.mkdir(object.id)
         os.mkdir(object.id+"/image")
         output(object.id,object.rendered_html)
         commit_message = ' '.join((object.id, object.title,"\n",object.description))
         os.system('git add *')
         os.system("git commit -a -m 'updated redirects'")
-        os.system("git checkout main")
+    os.system("git checkout main")
