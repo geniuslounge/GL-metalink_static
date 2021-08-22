@@ -1,5 +1,6 @@
 from jinja2 import Environment, PackageLoader, select_autoescape
 from metalink.metalink import Video
+import os
 import yaml
 env = Environment(
     loader=PackageLoader("metalink"),
@@ -9,22 +10,25 @@ template = env.get_template("index.html")
 
 
 def render_html(video_obj):
-    return template.render(og_title=video_obj.title, og_description=video_obj.description, channel_domain=video_obj.domain, video_id=video_obj.id, og_image=video_obj.thumbnail_URL, keywords=video_obj.keywords)
+    rendered_html = template.render(og_title=video_obj.title, og_description=video_obj.description, channel_domain=video_obj.domain, video_id=video_obj.id, og_image=video_obj.thumbnail_URL, keywords=video_obj.keywords)
+    video_obj.rendered_html= rendered_html
+    return rendered_html
+with open("video_list.yaml", 'r') as stream:
+    try:
+        video_list = yaml.safe_load(stream)["videos"]
+    except yaml.YAMLError as exc:
+        print(exc)
+
+def output(video_id, rendered_html):
+    outF = open(video_id+"/index.html", "w")
+    outF.writelines(rendered_html)
+    outF.close()
 
 if __name__ == '__main__':
-    with open("video_list.yaml", 'r') as stream:
-        try:
-            video_list = yaml.safe_load(stream)["videos"]
-        except yaml.YAMLError as exc:
-            print(exc)
-    video_objects=[]
+    os.system("")
     for x in video_list:
-        video_object = Video(x)
-        print(video_object.title)
-        print(video_object.description)
-        print(video_object.domain)
-        print(video_object.id)
-        print(video_object.thumbnail_URL)
-        print(video_object.keywords)
-        print(video_object.URL)
-        print(render_html(video_object))
+        object=Video(x)
+        render_html(object)
+        os.mkdir(object.id)
+        os.mkdir(object.id+"/image")
+        output(object.id,object.rendered_html)
