@@ -25,10 +25,15 @@ def output(video_id, rendered_html):
     outF.close()
 
 if __name__ == '__main__':
-    os.system("")
+    os.system("git stash")
+    os.system("git checkout release")
+
     for x in video_list:
         object=Video(x)
         render_html(object)
         os.mkdir(object.id)
         os.mkdir(object.id+"/image")
         output(object.id,object.rendered_html)
+        commit_message = ' '.join((object.id, object.title,"\n",object.description))
+        os.system("git commit -a -m '%s'" % commit_message)
+    os.system("git checkout main")
