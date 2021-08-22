@@ -38,4 +38,8 @@ if __name__ == '__main__':
         commit_message = ' '.join((object.id, object.title,"\n",object.description))
         os.system('git add *')
         os.system("git commit -a -m 'updated redirects'")
-    os.system("git checkout main")
+        os.system("git checkout main")
+        os.system("rm -Rf " + object.id)
+    os.system("git stash pop")
+
+
