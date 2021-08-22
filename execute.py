@@ -35,5 +35,6 @@ if __name__ == '__main__':
         os.mkdir(object.id+"/image")
         output(object.id,object.rendered_html)
         commit_message = ' '.join((object.id, object.title,"\n",object.description))
-        os.system("git commit -a -m '%s'" % commit_message)
-    os.system("git checkout main")
+        os.system('git add *')
+        os.system("git commit -a -m 'updated redirects'")
+        os.system("git checkout main")
