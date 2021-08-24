@@ -38,9 +38,22 @@ def output(video_id, rendered_html, image=False):
         outF.writelines(rendered_html)
         outF.close()
 
+
+def yaml_processor(video_obj):
+    video_yaml = dict()
+    video_yaml.update({"id": video_obj.id})
+    video_yaml.update({"title": video_obj.title})
+    video_yaml.update({"description": video_obj.description})
+    video_yaml.update({"keywords": video_obj.keywords})
+    video_yaml.update({"thumbnail": video_obj.thumbnail_URL})
+    with open("/"+video_obj.id+"video.yaml", 'w') as file:
+        yaml.safe_dump(dict_file, file)
+
+
+    return video_yaml
+
 if __name__ == '__main__':
     os.system("git stash")
-
     for x in video_list:
         object=Video(x)
         render_index_html(object)
@@ -49,6 +62,7 @@ if __name__ == '__main__':
         os.system("rm -Rf " + object.id)
         os.mkdir(object.id)
         os.mkdir(object.id+"/image")
+        yaml_processor(object)
         output(object.id,object.index_html)
         output(object.id,object.image_html, image=True)
         commit_message = ' '.join((object.id, object.title,"\n",object.description))
