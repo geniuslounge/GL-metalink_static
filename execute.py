@@ -46,8 +46,10 @@ def yaml_processor(video_obj):
     video_yaml.update({"description": video_obj.description})
     video_yaml.update({"keywords": video_obj.keywords})
     video_yaml.update({"thumbnail": video_obj.thumbnail_URL})
-    with open("/"+video_obj.id+"/video.yaml", 'w') as file:
-        yaml.safe_dump(dict_file, file)
+    os.system("touch " + "/"+video_obj.id+"/video.yaml")
+    with open(video_obj.id + "/video.yaml", 'w') as file:
+        yaml.safe_dump(video_yaml, file)
+    file.close()
 
 
     return video_yaml
