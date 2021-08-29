@@ -2,6 +2,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 from metalink.metalink import Video
 import os
 import yaml
+import requests
 # Envirorment for Jinja templates
 env = Environment(
     loader=PackageLoader("metalink"),
