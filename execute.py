@@ -38,6 +38,10 @@ def output(video_id, rendered_html, image=False):
         outF.writelines(rendered_html)
         outF.close()
 
+def image_downloader(video_obj):
+    url = video_obj.thumbnail_URL
+    r = requests.get(url, allow_redirects=True)
+    open(video_obj.id + '/image/thumbnail.png', 'wb').write(r.content)
 
 def yaml_processor(video_obj):
     video_yaml = dict()
@@ -50,9 +54,8 @@ def yaml_processor(video_obj):
     with open(video_obj.id + "/video.yaml", 'w') as file:
         yaml.safe_dump(video_yaml, file)
     file.close()
-
-
     return video_yaml
+
 
 if __name__ == '__main__':
     os.system("git stash")
@@ -67,6 +70,7 @@ if __name__ == '__main__':
         yaml_processor(object)
         output(object.id,object.index_html)
         output(object.id,object.image_html, image=True)
+        image_downloader(object)
         commit_message = ' '.join((object.id, object.title,"\n",object.description))
         os.system('git add *')
         os.system("git commit -a -m 'updated redirects'")
